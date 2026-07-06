@@ -1,14 +1,14 @@
+"use client";
+
 import { MonitorSmartphone, ShieldCheck } from "lucide-react";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { SessionsModal } from "@pollar/react";
 
 export default function SessionsPage() {
-  const sessions = [
-    { device: "MacBook Pro - Chrome", location: "Washington, D.C., USA", current: true, time: "Active Now" },
-    { device: "iPhone 14 Pro - Safari", location: "Washington, D.C., USA", current: false, time: "2 hours ago" },
-  ];
+  const [showWidget, setShowWidget] = useState(false);
 
   return (
-    <div className="max-w-4xl mx-auto mt-8">
+    <div className="max-w-4xl mx-auto mt-8 relative">
       <div className="flex items-center gap-3 mb-8">
         <div className="p-3 bg-emerald-500/10 rounded-xl">
           <MonitorSmartphone className="text-emerald-400" size={24} />
@@ -21,35 +21,27 @@ export default function SessionsPage() {
         <p className="text-emerald-400 text-sm">Your account is secured by Pollar's non-custodial infrastructure.</p>
       </div>
 
-      <div className="space-y-4">
-        {sessions.map((session, i) => (
-          <motion.div 
-            key={i}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="glass-card p-6 rounded-2xl flex items-center justify-between"
-          >
-            <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-white font-bold">{session.device}</h3>
-                {session.current && (
-                  <span className="bg-emerald-500/20 text-emerald-400 text-[10px] uppercase tracking-widest px-2 py-1 rounded-md font-bold">
-                    Current
-                  </span>
-                )}
-              </div>
-              <p className="text-slate-400 text-sm mt-1">{session.location} • {session.time}</p>
-            </div>
-            
-            {!session.current && (
-              <button className="text-red-400 text-sm font-bold uppercase tracking-widest hover:text-red-300">
-                Revoke
-              </button>
-            )}
-          </motion.div>
-        ))}
+      <div className="glass-card p-8 rounded-3xl text-center">
+        <h2 className="text-xl font-bold text-white mb-2">Manage Your Devices</h2>
+        <p className="text-slate-400 mb-6 max-w-md mx-auto">
+          View all devices currently logged into your wallet and remotely revoke access to keep your funds safe.
+        </p>
+        
+        <button 
+          onClick={() => setShowWidget(true)}
+          className="bg-slate-800 text-white font-bold uppercase tracking-widest py-3 px-8 rounded-xl hover:bg-slate-700 transition-colors"
+        >
+          View Active Sessions
+        </button>
       </div>
+
+      {showWidget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="relative w-full max-w-md">
+            <SessionsModal onClose={() => setShowWidget(false)} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,25 +1,34 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
-import { AppHeader } from "@/components/AppHeader";
+import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
+import { MobileNav } from "@/components/MobileNav";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pollar Neobank — consumer banking template",
-  description:
-    "A batteries-included consumer banking app on Stellar: balance, receive, send, and history — powered by Pollar.",
+  title: "Pollar Neobank Template",
+  description: "A functional Neobank shell powered by Pollar on Stellar.",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-neutral-50 text-neutral-900 antialiased">
+      <body className="min-h-screen bg-slate-950 text-white antialiased selection:bg-emerald-500/20">
         <Providers>
-          <AppHeader />
-          <main className="mx-auto max-w-md px-4 py-6">{children}</main>
+          <div className="flex h-screen overflow-hidden">
+            <Sidebar />
+            <div className="flex-1 flex flex-col md:ml-64 relative w-full h-full">
+              <Header />
+              <main className="flex-1 overflow-y-auto px-4 md:px-8 py-8 pb-24 md:pb-8 relative z-10 w-full max-w-7xl mx-auto">
+                {children}
+              </main>
+              <MobileNav />
+            </div>
+          </div>
         </Providers>
       </body>
     </html>

@@ -2,13 +2,16 @@
 
 // Account home — composes the SDK natives into one screen: balance, address+QR
 // to receive, assets/trustlines, and entry points to send / full receive modal.
-// Nothing here reimplements wallet logic; it reads from usePollar()/the client.
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { QRCodeSVG } from "qrcode.react";
 import { usePollar } from "@pollar/react";
 import type { WalletBalanceContent } from "@pollar/core";
+import { motion } from "framer-motion";
+import { Send, ArrowDownToLine, History, Copy, Check } from "lucide-react";
+import { toast } from "sonner";
+import { clsx } from "clsx";
 
 type Balance = WalletBalanceContent["balances"][number];
 
@@ -39,93 +42,119 @@ export function AccountHome() {
   const copy = async () => {
     await navigator.clipboard.writeText(walletAddress);
     setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    toast.success("Address copied to clipboard");
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <div className="space-y-5">
-      {/* Total / primary balance */}
-      <section className="rounded-3xl bg-gradient-to-br from-violet-600 to-violet-800 p-6 text-white shadow-sm">
-        <p className="text-sm/relaxed text-violet-200">Available</p>
-        {balances === null ? (
-          <div className="mt-1 h-9 w-40 animate-pulse rounded bg-white/20" />
-        ) : (
-          <p className="font-mono text-3xl font-bold">
-            {xlm ? Number(xlm.available).toFixed(4) : "0.0000"}{" "}
-            <span className="text-base font-normal text-violet-200">XLM</span>
-          </p>
-        )}
-        <div className="mt-4 flex gap-2">
-          <Link
-            href="/send"
-            className="flex-1 rounded-xl bg-white py-2 text-center text-sm font-semibold text-violet-700"
-          >
-            Send
-          </Link>
-          <button
-            onClick={openReceiveModal}
-            className="flex-1 rounded-xl bg-violet-500/40 py-2 text-center text-sm font-semibold ring-1 ring-white/30"
-          >
-            Receive
-          </button>
-          <Link
-            href="/history"
-            className="flex-1 rounded-xl bg-violet-500/40 py-2 text-center text-sm font-semibold ring-1 ring-white/30"
-          >
-            History
-          </Link>
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
+      {/* Total / primary balance - Virtual Card */}
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600/80 to-purple-900/80 p-6 text-white shadow-xl shadow-violet-900/20 backdrop-blur-xl border border-white/10">
+        <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl"></div>
+        <div className="absolute -bottom-10 -left-10 h-40 w-40 rounded-full bg-violet-400/20 blur-3xl"></div>
+        
+        <div className="relative z-10">
+          <p className="text-sm/relaxed font-medium text-violet-200 uppercase tracking-wider">Available Balance</p>
+          {balances === null ? (
+            <div className="mt-2 h-10 w-48 animate-pulse rounded-lg bg-white/20" />
+          ) : (
+            <div className="mt-1 flex items-baseline gap-2">
+              <p className="font-mono text-4xl font-bold tracking-tight">
+                {xlm ? Number(xlm.available).toFixed(4) : "0.0000"}
+              </p>
+              <span className="text-lg font-medium text-violet-200">XLM</span>
+            </div>
+          )}
+          
+          <div className="mt-8 flex gap-3">
+            <Link
+              href="/send"
+              className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white py-3 text-sm font-semibold text-violet-900 transition-transform hover:scale-105 hover:bg-slate-50 shadow-md"
+            >
+              <Send size={16} /> Send
+            </Link>
+            <button
+              onClick={openReceiveModal}
+              className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white/10 py-3 text-sm font-semibold text-white transition-transform hover:scale-105 hover:bg-white/20 ring-1 ring-white/20 backdrop-blur-sm"
+            >
+              <ArrowDownToLine size={16} /> Receive
+            </button>
+            <Link
+              href="/history"
+              className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-white/10 py-3 text-sm font-semibold text-white transition-transform hover:scale-105 hover:bg-white/20 ring-1 ring-white/20 backdrop-blur-sm"
+            >
+              <History size={16} /> History
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Receive: address + QR */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-5">
-        <h2 className="text-sm font-semibold text-neutral-500">Your address</h2>
-        <div className="mt-3 flex items-center gap-4">
-          <div className="rounded-lg border border-neutral-200 p-2">
-            <QRCodeSVG value={walletAddress} size={88} />
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5 backdrop-blur-sm">
+        <h2 className="text-sm font-semibold text-slate-400">Your address</h2>
+        <div className="mt-4 flex items-center gap-5">
+          <div className="rounded-xl bg-white p-2 shadow-sm">
+            <QRCodeSVG value={walletAddress} size={80} />
           </div>
           <div className="min-w-0 flex-1">
-            <p className="break-all font-mono text-xs text-neutral-600">{walletAddress}</p>
+            <p className="break-all font-mono text-xs text-slate-300 bg-slate-950 p-3 rounded-lg border border-slate-800 shadow-inner">
+              {walletAddress}
+            </p>
             <button
               onClick={copy}
-              className="mt-2 rounded-lg border border-neutral-300 px-3 py-1 text-xs font-medium hover:bg-neutral-50"
+              className={clsx(
+                "mt-3 flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-medium transition-colors w-full justify-center",
+                copied 
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" 
+                  : "bg-slate-800 text-slate-300 border border-slate-700 hover:bg-slate-700"
+              )}
             >
-              {copied ? "Copied ✓" : "Copy address"}
+              {copied ? <><Check size={14} /> Copied to clipboard</> : <><Copy size={14} /> Copy address</>}
             </button>
           </div>
         </div>
       </section>
 
       {/* Assets / trustlines */}
-      <section className="rounded-2xl border border-neutral-200 bg-white p-5">
-        <h2 className="text-sm font-semibold text-neutral-500">Assets</h2>
+      <section className="rounded-2xl border border-slate-800 bg-slate-900/50 p-5 backdrop-blur-sm">
+        <h2 className="text-sm font-semibold text-slate-400">Assets</h2>
         {error ? (
-          <p className="mt-3 text-sm text-red-600">{error}</p>
+          <p className="mt-4 rounded-lg bg-red-500/10 p-3 text-sm text-red-400 border border-red-500/20">{error}</p>
         ) : balances === null ? (
-          <div className="mt-3 space-y-2">
-            <div className="h-10 animate-pulse rounded bg-neutral-100" />
-            <div className="h-10 animate-pulse rounded bg-neutral-100" />
+          <div className="mt-4 space-y-3">
+            <div className="h-12 animate-pulse rounded-xl bg-slate-800" />
+            <div className="h-12 animate-pulse rounded-xl bg-slate-800" />
           </div>
         ) : balances.length === 0 ? (
-          <p className="mt-3 text-sm text-neutral-500">No assets yet.</p>
+          <p className="mt-4 rounded-lg bg-slate-800/50 p-4 text-center text-sm text-slate-500">No assets yet.</p>
         ) : (
-          <ul className="mt-3 divide-y divide-neutral-100">
+          <ul className="mt-4 divide-y divide-slate-800">
             {balances.map((b) => (
-              <li key={`${b.code}:${b.issuer ?? "native"}`} className="flex items-center justify-between py-2.5">
-                <div>
-                  <p className="font-medium">{b.code}</p>
-                  {b.issuer && (
-                    <p className="font-mono text-xs text-neutral-400">
-                      {b.issuer.slice(0, 4)}…{b.issuer.slice(-4)}
-                    </p>
-                  )}
+              <li key={`${b.code}:${b.issuer ?? "native"}`} className="flex items-center justify-between py-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-slate-200 font-bold border border-slate-700 shadow-sm">
+                    {b.code.slice(0, 1)}
+                  </div>
+                  <div>
+                    <p className="font-medium text-slate-200">{b.code}</p>
+                    {b.issuer && (
+                      <p className="font-mono text-xs text-slate-500">
+                        {b.issuer.slice(0, 4)}…{b.issuer.slice(-4)}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <p className="font-mono">{Number(b.balance).toFixed(4)}</p>
+                <p className="font-mono font-medium text-slate-200">{Number(b.balance).toFixed(4)}</p>
               </li>
             ))}
           </ul>
         )}
       </section>
-    </div>
+    </motion.div>
   );
 }

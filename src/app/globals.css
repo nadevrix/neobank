@@ -1,21 +1,35 @@
 @import "tailwindcss";
 
-/* Pollar light theme — violet primary on white, neutral grays.
-   Reference branding: https://pollar.xyz */
+/* Pollar Neobank Dark Theme */
 :root {
-  --pollar-primary: #7c3aed; /* violet-600 */
-  --pollar-bg: #ffffff;
-  --pollar-fg: #171717;
+  --pollar-primary: #10b981; /* emerald-500 */
+  --pollar-bg: #0f172a; /* slate-900 */
+  --pollar-fg: #f8fafc; /* slate-50 */
+  --glass-bg: rgba(30, 41, 59, 0.7); /* slate-800 with opacity */
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 body {
-  font-family:
-    var(--font-geist-sans),
-    ui-sans-serif,
-    system-ui,
-    sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  background-color: var(--pollar-bg);
+  color: var(--pollar-fg);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%), 
+    radial-gradient(at 100% 0%, hsla(160,84%,39%,0.1) 0, transparent 50%);
+  background-attachment: fixed;
+  background-size: cover;
+  min-height: 100vh;
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }

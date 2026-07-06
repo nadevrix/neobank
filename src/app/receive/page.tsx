@@ -4,6 +4,7 @@ import { usePollar } from "@pollar/react";
 import { motion } from "framer-motion";
 import { Download as ReceiveIcon, Copy, CheckCircle2, QrCode } from "lucide-react";
 import { useState } from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function ReceivePage() {
   const { wallet } = usePollar();
@@ -39,10 +40,13 @@ export default function ReceivePage() {
         
         <div className="relative z-10 flex flex-col items-center">
           <div className="bg-white p-4 rounded-2xl mb-8 shadow-xl">
-             {/* Placeholder for actual QR code rendering */}
-             <div className="w-48 h-48 bg-slate-100 flex items-center justify-center rounded-xl border-4 border-emerald-500">
-               <QrCode size={120} className="text-slate-800" />
-             </div>
+             {walletAddress ? (
+               <QRCodeSVG value={walletAddress} size={192} />
+             ) : (
+               <div className="w-48 h-48 bg-slate-100 flex items-center justify-center rounded-xl">
+                 <QrCode size={120} className="text-slate-300" />
+               </div>
+             )}
           </div>
           
           <h3 className="font-bold text-lg text-white mb-2">Your Stellar Address</h3>

@@ -106,13 +106,13 @@ export function MobileNav() {
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsMenuOpen(false)}
-                      className={`flex flex-col items-center justify-center gap-3 p-6 rounded-3xl border transition-all duration-200 ${
+                      className={`flex flex-col items-center justify-center gap-2 p-4 rounded-3xl border transition-all duration-200 ${
                         isActive 
                           ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.1)]" 
                           : "bg-slate-900/50 border-slate-800/50 text-slate-400 hover:bg-slate-800 hover:text-white"
                       }`}
                     >
-                      <Icon size={32} className={isActive ? "text-emerald-400" : "text-slate-500"} />
+                      <Icon size={24} className={isActive ? "text-emerald-400" : "text-slate-500"} />
                       <span className="text-xs font-bold uppercase tracking-widest text-center">{link.name}</span>
                     </Link>
                   );
@@ -120,7 +120,7 @@ export function MobileNav() {
               </div>
             </div>
             
-            <div className="p-8 pb-32 text-center border-t border-slate-800/50">
+            <div className="p-4 pb-12 text-center border-t border-slate-800/50">
               <p className="text-xs text-slate-500 uppercase tracking-widest font-bold">Pollar Neobank</p>
             </div>
           </motion.div>

@@ -121,11 +121,11 @@ export default function NeobankDashboard() {
                 <div key={i} className="flex items-center justify-between group p-4 rounded-2xl bg-slate-900/30 hover:bg-slate-800/50 border border-transparent hover:border-slate-700/50 transition-all cursor-pointer">
                   <div className="flex items-center gap-4">
                     <div className="h-12 w-12 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-white font-bold shadow-inner">
-                      {asset.asset_code ? asset.asset_code.substring(0, 1) : "X"}
+                      {asset.code ? asset.code.substring(0, 1) : "X"}
                     </div>
                     <div>
                       <p className="font-bold text-sm text-white group-hover:text-emerald-400 transition-colors">
-                        {asset.asset_code || "XLM"}
+                        {asset.code || "XLM"}
                       </p>
                       <p className="text-xs text-slate-500 mt-1">Native Stellar</p>
                     </div>

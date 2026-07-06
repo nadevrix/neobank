@@ -15,11 +15,28 @@ import { clsx } from "clsx";
 const PAGE = 20;
 
 export function HistoryList() {
-  const { txHistory, getClient } = usePollar();
+  const { txHistory, getClient, isAuthenticated } = usePollar();
 
   useEffect(() => {
-    void getClient().fetchTxHistory({ limit: PAGE, offset: 0 });
-  }, [getClient]);
+    async function load() {
+      if (!isAuthenticated) return;
+      try {
+        await getClient().ready();
+        await getClient().fetchTxHistory({ limit: PAGE, offset: 0 });
+      } catch (e) {
+        console.error("Failed to fetch history:", e);
+      }
+    }
+    void load();
+  }, [getClient, isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="py-16 text-center text-slate-500 rounded-2xl border border-slate-800 border-dashed">
+        <p>Please connect your wallet to view history.</p>
+      </div>
+    );
+  }
 
   if (txHistory.step === "idle" || txHistory.step === "loading") {
     return (
@@ -36,7 +53,14 @@ export function HistoryList() {
       <div className="space-y-4 py-10 text-center rounded-2xl border border-red-500/20 bg-red-500/5">
         <p className="text-sm text-red-400">{txHistory.message}</p>
         <button
-          onClick={() => getClient().fetchTxHistory({ limit: PAGE, offset: 0 })}
+          onClick={async () => {
+            try {
+              await getClient().ready();
+              await getClient().fetchTxHistory({ limit: PAGE, offset: 0 });
+            } catch (e) {
+              console.error(e);
+            }
+          }}
           className="rounded-xl bg-slate-800 px-5 py-2.5 text-sm font-medium text-slate-200 hover:bg-slate-700 transition-colors"
         >
           Retry

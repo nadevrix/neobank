@@ -16,12 +16,14 @@ import { clsx } from "clsx";
 type Balance = WalletBalanceContent["balances"][number];
 
 export function AccountHome() {
-  const { walletAddress, getClient, openReceiveModal } = usePollar();
+  const { wallet, getClient, openReceiveModal } = usePollar();
+  const walletAddress = wallet?.address;
   const [balances, setBalances] = useState<Balance[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
 
   const load = useCallback(async () => {
+    if (!walletAddress) return;
     setError(null);
     try {
       const client = getClient();
@@ -40,10 +42,12 @@ export function AccountHome() {
   const xlm = balances?.find((b) => b.type === "native");
 
   const copy = async () => {
-    await navigator.clipboard.writeText(walletAddress);
-    setCopied(true);
-    toast.success("Address copied to clipboard");
-    setTimeout(() => setCopied(false), 2000);
+    if (walletAddress) {
+      await navigator.clipboard.writeText(walletAddress);
+      setCopied(true);
+      toast.success("Address copied to clipboard");
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -99,7 +103,7 @@ export function AccountHome() {
         <h2 className="text-sm font-semibold text-slate-400">Your address</h2>
         <div className="mt-4 flex items-center gap-5">
           <div className="rounded-xl bg-white p-2 shadow-sm">
-            <QRCodeSVG value={walletAddress} size={80} />
+            <QRCodeSVG value={walletAddress || ""} size={80} />
           </div>
           <div className="min-w-0 flex-1">
             <p className="break-all font-mono text-xs text-slate-300 bg-slate-950 p-3 rounded-lg border border-slate-800 shadow-inner">

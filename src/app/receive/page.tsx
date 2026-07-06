@@ -6,7 +6,8 @@ import { Download as ReceiveIcon, Copy, CheckCircle2, QrCode } from "lucide-reac
 import { useState } from "react";
 
 export default function ReceivePage() {
-  const { walletAddress } = usePollar();
+  const { wallet } = usePollar();
+  const walletAddress = wallet?.address;
   const [copied, setCopied] = useState(false);
 
   const copyAddress = () => {

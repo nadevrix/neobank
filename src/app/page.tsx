@@ -2,18 +2,24 @@
 
 import { usePollar } from "@pollar/react";
 import { motion } from "framer-motion";
-import { Wallet, CreditCard, ArrowUpRight, Copy, CheckCircle2 } from "lucide-react";
+import { Wallet, CreditCard, ArrowUpRight, Copy, CheckCircle2, Check } from "lucide-react";
 import { VirtualCard } from "@/components/VirtualCard";
 import { useState } from "react";
 import Link from "next/link";
 
 export default function NeobankDashboard() {
-  const { walletAddress, walletBalance } = usePollar();
+  const { wallet, walletBalance } = usePollar();
+  const walletAddress = wallet?.address;
   const balances = walletBalance.step === 'loaded' ? walletBalance.data.balances : [];
   const isLoading = walletBalance.step === 'loading';
   const [copied, setCopied] = useState(false);
 
-  const copyAddress = () => {
+  const truncateAddress = (addr: string) => {
+    if (!addr) return "";
+    return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
+  };
+
+  const handleCopy = () => {
     if (walletAddress) {
       navigator.clipboard.writeText(walletAddress);
       setCopied(true);
@@ -21,30 +27,25 @@ export default function NeobankDashboard() {
     }
   };
 
-  const truncateAddress = (addr: string) => {
-    if (!addr) return "";
-    return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
-  };
-
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4">
+    <div className="max-w-6xl mx-auto space-y-6 mt-8">
+      
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-widest uppercase font-serif text-white">Dashboard</h1>
-          <p className="text-slate-400 mt-1 text-sm">Welcome back to Pollar Neobank</p>
+          <h1 className="text-3xl font-bold text-white mb-2 uppercase tracking-widest">Dashboard</h1>
+          <p className="text-slate-400">Welcome back. Here is your portfolio summary.</p>
         </div>
-        
         {walletAddress && (
-          <div className="flex items-center gap-2 bg-slate-900/50 px-4 py-2 rounded-full border border-slate-800">
-            <span className="text-xs text-slate-400 font-medium font-mono">
-              {truncateAddress(walletAddress)}
-            </span>
-            <button 
-              onClick={copyAddress}
-              className="text-slate-500 hover:text-emerald-400 transition-colors"
-            >
-              {copied ? <CheckCircle2 size={14} /> : <Copy size={14} />}
-            </button>
+          <div 
+            onClick={handleCopy}
+            className="flex items-center gap-2 bg-slate-800/50 hover:bg-slate-800 px-4 py-2 rounded-xl border border-slate-700 cursor-pointer transition-colors"
+          >
+            <div className="flex items-center gap-2 text-slate-300">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)] animate-pulse" />
+              <span className="font-mono text-sm">{truncateAddress(walletAddress)}</span>
+            </div>
+            {copied ? <Check size={16} className="text-emerald-400" /> : <Copy size={16} className="text-slate-500" />}
           </div>
         )}
       </div>

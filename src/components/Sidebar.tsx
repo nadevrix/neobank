@@ -11,7 +11,11 @@ export function Sidebar() {
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
     { name: "Send", href: "/send", icon: Send },
     { name: "Receive", href: "/receive", icon: Download },
+    { name: "Swap", href: "/swap", icon: ArrowRightLeft },
+    { name: "Earn", href: "/earn", icon: PiggyBank },
     { name: "History", href: "/history", icon: History },
+    { name: "Ramps", href: "/ramps", icon: CreditCard },
+    { name: "Sessions", href: "/sessions", icon: MonitorSmartphone },
   ];
 
   return (

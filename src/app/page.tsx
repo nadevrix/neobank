@@ -2,7 +2,7 @@
 
 import { usePollar } from "@pollar/react";
 import { motion } from "framer-motion";
-import { Wallet, CreditCard, ArrowUpRight, Copy, CheckCircle2, Check, Download, Send, ArrowRightLeft, PiggyBank } from "lucide-react";
+import { Wallet, CreditCard, ArrowUpRight, Copy, CheckCircle2, Check, Download, Send } from "lucide-react";
 import { VirtualCard } from "@/components/VirtualCard";
 import { useState } from "react";
 import Link from "next/link";
@@ -78,34 +78,18 @@ export default function NeobankDashboard() {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-3 w-full md:w-auto md:flex md:gap-4">
+          <div className="flex gap-4 w-full md:w-auto">
             <Link 
               href="/receive"
-              className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 bg-slate-800 text-white hover:bg-slate-700 p-4 md:px-8 md:py-4 rounded-2xl md:rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-colors border border-slate-700 shadow-xl"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-800 text-white hover:bg-slate-700 p-4 md:px-8 md:py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-colors border border-slate-700 shadow-xl"
             >
-              <Download size={20} className="md:hidden text-emerald-400 mb-1" />
               Deposit
             </Link>
             <Link 
               href="/send"
-              className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 bg-emerald-500 text-slate-900 hover:bg-emerald-400 p-4 md:px-8 md:py-4 rounded-2xl md:rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1"
+              className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-emerald-500 text-slate-900 hover:bg-emerald-400 p-4 md:px-8 md:py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1"
             >
-              <Send size={20} className="md:hidden mb-1" />
               Send
-            </Link>
-            <Link 
-              href="/swap"
-              className="md:hidden flex flex-col items-center justify-center gap-1 bg-slate-800 text-white hover:bg-slate-700 p-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-colors border border-slate-700 shadow-xl"
-            >
-              <ArrowRightLeft size={20} className="text-emerald-400 mb-1" />
-              Swap
-            </Link>
-            <Link 
-              href="/earn"
-              className="md:hidden flex flex-col items-center justify-center gap-1 bg-slate-800 text-white hover:bg-slate-700 p-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-colors border border-slate-700 shadow-xl"
-            >
-              <PiggyBank size={20} className="text-emerald-400 mb-1" />
-              Earn
             </Link>
           </div>
         </div>

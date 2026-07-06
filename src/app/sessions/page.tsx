@@ -1,11 +1,10 @@
 "use client";
 
 import { MonitorSmartphone, ShieldCheck } from "lucide-react";
-import { useState } from "react";
-import { SessionsModal } from "@pollar/react";
+import { usePollar } from "@pollar/react";
 
 export default function SessionsPage() {
-  const [showWidget, setShowWidget] = useState(false);
+  const { openSessionsModal, isAuthenticated } = usePollar();
 
   return (
     <div className="max-w-4xl mx-auto mt-8 relative">
@@ -28,20 +27,13 @@ export default function SessionsPage() {
         </p>
         
         <button 
-          onClick={() => setShowWidget(true)}
-          className="bg-slate-800 text-white font-bold uppercase tracking-widest py-3 px-8 rounded-xl hover:bg-slate-700 transition-colors"
+          onClick={openSessionsModal}
+          disabled={!isAuthenticated}
+          className="bg-slate-800 text-white font-bold uppercase tracking-widest py-3 px-8 rounded-xl hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          View Active Sessions
+          {isAuthenticated ? "View Active Sessions" : "Login to View"}
         </button>
       </div>
-
-      {showWidget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md">
-            <SessionsModal onClose={() => setShowWidget(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

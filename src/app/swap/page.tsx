@@ -1,11 +1,10 @@
 "use client";
 
 import { ArrowRightLeft } from "lucide-react";
-import { useState } from "react";
-import { SwapModal } from "@pollar/react";
+import { usePollar } from "@pollar/react";
 
 export default function SwapPage() {
-  const [showWidget, setShowWidget] = useState(false);
+  const { openSwapModal, isAuthenticated } = usePollar();
 
   return (
     <div className="max-w-2xl mx-auto mt-8 relative">
@@ -23,20 +22,13 @@ export default function SwapPage() {
         </p>
         
         <button 
-          onClick={() => setShowWidget(true)}
-          className="bg-emerald-500 text-slate-900 font-bold uppercase tracking-widest py-3 px-8 rounded-xl hover:bg-emerald-400 transition-colors"
+          onClick={openSwapModal}
+          disabled={!isAuthenticated}
+          className="bg-emerald-500 text-slate-900 font-bold uppercase tracking-widest py-3 px-8 rounded-xl hover:bg-emerald-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Open Swap
+          {isAuthenticated ? "Open Swap" : "Connect Wallet First"}
         </button>
       </div>
-
-      {showWidget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md">
-            <SwapModal onClose={() => setShowWidget(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

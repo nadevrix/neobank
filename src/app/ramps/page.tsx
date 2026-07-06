@@ -2,11 +2,10 @@
 
 import { CreditCard, DollarSign, Building } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
-import { RampWidget } from "@pollar/react";
+import { usePollar } from "@pollar/react";
 
 export default function RampsPage() {
-  const [showWidget, setShowWidget] = useState(false);
+  const { openRampModal, isAuthenticated } = usePollar();
 
   const ramps = [
     { name: "Global Onramp", type: "Buy & Sell Crypto", icon: DollarSign, color: "text-purple-400", bg: "bg-purple-500/10" },
@@ -44,23 +43,16 @@ export default function RampsPage() {
                 </div>
               </div>
               <button 
-                onClick={() => setShowWidget(true)}
-                className="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700"
+                onClick={openRampModal}
+                disabled={!isAuthenticated}
+                className="bg-slate-800 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Connect
+                {isAuthenticated ? "Connect" : "Login"}
               </button>
             </motion.div>
           );
         })}
       </div>
-
-      {showWidget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md">
-            <RampWidget onClose={() => setShowWidget(false)} />
-          </div>
-        </div>
-      )}
     </div>
   );
 }

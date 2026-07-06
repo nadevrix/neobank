@@ -66,30 +66,46 @@ export default function NeobankDashboard() {
               <div className="h-12 w-48 bg-slate-800 rounded animate-pulse" />
             ) : (
               <div className="flex items-baseline gap-2">
-                <span className="text-6xl font-extrabold tracking-tight text-white">
+                <span className="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
                   ${balances?.[0]?.balance ? parseFloat(balances[0].balance).toFixed(2) : "0.00"}
                 </span>
-                <span className="text-xl font-bold text-slate-500">USDC</span>
+                <span className="text-lg md:text-xl font-bold text-slate-500">USDC</span>
               </div>
             )}
             
-            <div className="mt-6 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 w-fit px-4 py-2 rounded-full border border-emerald-500/20">
+            <div className="mt-6 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-400 bg-emerald-500/10 w-fit px-4 py-2 rounded-full border border-emerald-500/20 mb-6 md:mb-0">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Account Active
             </div>
           </div>
           
-          <div className="flex gap-4 w-full md:w-auto">
+          <div className="grid grid-cols-2 gap-3 w-full md:w-auto md:flex md:gap-4">
             <Link 
               href="/receive"
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-slate-800 text-white hover:bg-slate-700 px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-colors border border-slate-700 hover:border-slate-600 shadow-xl"
+              className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 bg-slate-800 text-white hover:bg-slate-700 p-4 md:px-8 md:py-4 rounded-2xl md:rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-colors border border-slate-700 shadow-xl"
             >
+              <Download size={20} className="md:hidden text-emerald-400 mb-1" />
               Deposit
             </Link>
             <Link 
               href="/send"
-              className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-emerald-500 text-slate-900 hover:bg-emerald-400 px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1"
+              className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 bg-emerald-500 text-slate-900 hover:bg-emerald-400 p-4 md:px-8 md:py-4 rounded-2xl md:rounded-full font-bold uppercase tracking-widest text-[10px] md:text-xs transition-all shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1"
             >
+              <Send size={20} className="md:hidden mb-1" />
               Send
+            </Link>
+            <Link 
+              href="/swap"
+              className="md:hidden flex flex-col items-center justify-center gap-1 bg-slate-800 text-white hover:bg-slate-700 p-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-colors border border-slate-700 shadow-xl"
+            >
+              <ArrowRightLeft size={20} className="text-emerald-400 mb-1" />
+              Swap
+            </Link>
+            <Link 
+              href="/earn"
+              className="md:hidden flex flex-col items-center justify-center gap-1 bg-slate-800 text-white hover:bg-slate-700 p-4 rounded-2xl font-bold uppercase tracking-widest text-[10px] transition-colors border border-slate-700 shadow-xl"
+            >
+              <PiggyBank size={20} className="text-emerald-400 mb-1" />
+              Earn
             </Link>
           </div>
         </div>

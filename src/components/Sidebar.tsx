@@ -21,8 +21,8 @@ export function Sidebar() {
           <div className="bg-emerald-500 text-slate-900 p-2 rounded-lg group-hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20">
             <Landmark size={24} />
           </div>
-          <span className="text-2xl font-bold tracking-widest text-white uppercase font-serif">
-            Pollar
+          <span className="text-xl font-bold tracking-widest text-white uppercase font-serif">
+            Pollar Neobank
           </span>
         </Link>
       </div>

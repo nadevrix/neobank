@@ -1,67 +1,43 @@
 "use client";
 
-import { PiggyBank, TrendingUp } from "lucide-react";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { DistributionRulesModal } from "@pollar/react";
+import { Wallet, TrendingUp, ShieldAlert, ArrowRight } from "lucide-react";
+import { usePollar } from "@pollar/react";
 
 export default function EarnPage() {
-  const [showWidget, setShowWidget] = useState(false);
-
-  const vaults = [
-    { name: "Pollar Rewards", apy: "Variable", balance: "0.00" },
-  ];
+  const { openEarnModal, isAuthenticated } = usePollar();
 
   return (
     <div className="max-w-4xl mx-auto mt-8 relative">
       <div className="flex items-center gap-3 mb-8">
         <div className="p-3 bg-emerald-500/10 rounded-xl">
-          <PiggyBank className="text-emerald-400" size={24} />
+          <TrendingUp className="text-emerald-400" size={24} />
         </div>
-        <h1 className="text-2xl font-bold text-white uppercase tracking-widest">Earn Yield</h1>
+        <h1 className="text-2xl font-bold text-white uppercase tracking-widest">Yield & Earn</h1>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {vaults.map((vault, i) => (
-          <motion.div 
-            key={i}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="glass-card p-6 rounded-3xl border border-slate-800 hover:border-emerald-500/30 transition-all cursor-pointer"
-          >
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <h3 className="font-bold text-white text-lg">{vault.name}</h3>
-                <p className="text-slate-400 text-sm mt-1">Claim airdrops and rewards</p>
-              </div>
-              <div className="bg-emerald-500/20 text-emerald-400 font-bold px-3 py-1 rounded-lg flex items-center gap-1">
-                <TrendingUp size={16} /> {vault.apy} APY
-              </div>
-            </div>
-            
-            <div className="bg-slate-900/50 p-4 rounded-xl flex justify-between items-center">
-              <span className="text-slate-500 text-sm font-bold uppercase tracking-widest">Your Deposit</span>
-              <span className="text-white font-bold">{vault.balance}</span>
-            </div>
-            
-            <button 
-              onClick={() => setShowWidget(true)}
-              className="w-full mt-4 bg-emerald-500 text-slate-900 font-bold uppercase tracking-widest py-3 rounded-xl hover:bg-emerald-400 transition-colors"
-            >
-              Open Rewards
-            </button>
-          </motion.div>
-        ))}
+      <div className="bg-slate-800/50 border border-slate-700 p-4 rounded-xl flex items-center gap-3 mb-8">
+        <ShieldAlert className="text-amber-400" size={20} />
+        <p className="text-slate-300 text-sm">
+          Yield is generated through third-party protocols (Blend, DeFindex) and carries smart contract risk.
+        </p>
       </div>
 
-      {showWidget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md">
-            <DistributionRulesModal onClose={() => setShowWidget(false)} />
-          </div>
-        </div>
-      )}
+      <div className="glass-card p-8 rounded-3xl text-center">
+        <h2 className="text-xl font-bold text-white mb-2">Put Your Idle Capital to Work</h2>
+        <p className="text-slate-400 mb-6 max-w-md mx-auto">
+          Deposit into curated DeFindex vaults or Blend pools directly from your Neobank wallet. 
+          Yield opportunities are fetched in real-time.
+        </p>
+        
+        <button 
+          onClick={openEarnModal}
+          disabled={!isAuthenticated}
+          className="bg-emerald-500 text-slate-900 font-bold uppercase tracking-widest py-3 px-8 rounded-xl hover:bg-emerald-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed inline-flex items-center gap-2"
+        >
+          {isAuthenticated ? "Explore Opportunities" : "Connect Wallet First"}
+          {isAuthenticated && <ArrowRight size={18} />}
+        </button>
+      </div>
     </div>
   );
 }

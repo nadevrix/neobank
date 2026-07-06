@@ -2,7 +2,7 @@
 
 import { usePollar } from "@pollar/react";
 import { motion } from "framer-motion";
-import { Wallet, CreditCard, ArrowUpRight, Copy, CheckCircle2, Check } from "lucide-react";
+import { Wallet, CreditCard, ArrowUpRight, Copy, CheckCircle2, Check, Download, Send, ArrowRightLeft, PiggyBank } from "lucide-react";
 import { VirtualCard } from "@/components/VirtualCard";
 import { useState } from "react";
 import Link from "next/link";
